@@ -14,7 +14,12 @@ namespace IntegrationTests.Tests
             TestConfig.TestDatabase.RunDbScript("TestSeed.sql");
 
         	var response = TestConfig.HttpClient.GetAsync("api/books/1");
-        	response.AssertOk<Book>();
+        	var book = response.AssertOk<Book>();
+
+            book.Id.Should().BePositive();
+            book.Name.Should().Be("Brave New World");
+            book.Author.Should().Be("Aldous Huxley");
+            book.YearPublished.Should().Be(1932);
         }
 
         [Test]
@@ -33,6 +38,7 @@ namespace IntegrationTests.Tests
                 Author = "Aldous Huxley",
                 YearPublished = 1962
             };
+
             var response = TestConfig.HttpClient.PostAsJsonAsync("api/books", book);
             var createdBook = response.AssertCreated<Book>();
 
