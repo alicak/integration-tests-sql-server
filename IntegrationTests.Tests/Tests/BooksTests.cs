@@ -8,12 +8,10 @@ namespace IntegrationTests.Tests
 	[TestFixture]
     public class BooksTests
     {
-        private readonly TestDatabase testDb = TestConfig.TestDatabase;
-
         [Test]
         public void GetBook_IsSuccessful()
         {
-            testDb.RunDbScript("TestSeed.sql");
+            TestConfig.TestDatabase.RunDbScript("TestSeed.sql");
 
         	var response = TestConfig.HttpClient.GetAsync("api/books/1");
         	response.AssertOk<Book>();
@@ -43,7 +41,7 @@ namespace IntegrationTests.Tests
             createdBook.Author.Should().Be(book.Author);
             createdBook.YearPublished.Should().Be(book.YearPublished);
 
-            testDb.CleanData();
+            TestConfig.TestDatabase.CleanData();
         }
     }
 }
